@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply font-mono;
+  }
+
+  body {
+    @apply bg-white text-black;
+    @apply antialiased;
+  }
+}
+
+@layer utilities {
+  /* Confidence gradient colors */
+  .confidence-0 { @apply bg-gray-400; }
+  .confidence-10 { @apply bg-gray-500; }
+  .confidence-20 { @apply bg-gray-600; }
+  .confidence-30 { @apply bg-yellow-600; }
+  .confidence-40 { @apply bg-yellow-500; }
+  .confidence-50 { @apply bg-yellow-400; }
+  .confidence-60 { @apply bg-lime-500; }
+  .confidence-70 { @apply bg-lime-600; }
+  .confidence-80 { @apply bg-green-500; }
+  .confidence-90 { @apply bg-green-600; }
+  .confidence-100 { @apply bg-green-700; }
+}

@@ -1,0 +1,25 @@
+[project]
+name = "procurement-api"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.119.0",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.31",
+    "langchain-openai>=0.3.35",
+    "pdf2image>=1.17.0",
+    "pillow>=11.3.0",
+    "pydantic>=2.12.0",
+    "pydantic-settings>=2.11.0",
+    "pypdf>=6.1.1",
+    "python-multipart>=0.0.20",
+    "sqlalchemy>=2.0.44",
+    "uvicorn>=0.37.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+]
