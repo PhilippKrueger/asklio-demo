@@ -6,6 +6,12 @@ export interface OrderLine {
   total_price: number;
 }
 
+export interface CommodityGroup {
+  id: number;
+  category: string;
+  name: string;
+}
+
 export interface Request {
   id: number;
   requestor_name: string;
@@ -20,6 +26,7 @@ export interface Request {
   order_lines: OrderLine[];
   created_at: string;
   updated_at: string;
+  currency?: string;
 }
 
 export interface RequestCreate {
@@ -33,10 +40,23 @@ export interface RequestCreate {
   order_lines: OrderLine[];
 }
 
-export interface ExtractedData {
+export interface RequestUpdate {
+  requestor_name?: string;
+  title?: string;
   vendor_name?: string;
   vat_id?: string;
   department?: string;
+  total_cost?: number;
+  commodity_group_id?: number;
+}
+
+export interface ExtractedData {
+  vendor_name?: string;
+  vat_id?: string;
+  requestor_department?: string;
   order_lines?: OrderLine[];
   total_cost?: number;
+  currency?: string;
+  confidence?: number;
+  commodity_group?: number;
 }

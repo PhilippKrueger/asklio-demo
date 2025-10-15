@@ -54,6 +54,7 @@ app.include_router(
     prefix=f"{settings.api_prefix}/requests",
     tags=["requests"]
 )
+
 app.include_router(
     commodity_groups_router.router,
     prefix=f"{settings.api_prefix}/commodity-groups",

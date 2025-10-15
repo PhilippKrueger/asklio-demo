@@ -1,32 +1,81 @@
-import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, Trash2, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RequestCreate, OrderLine, ExtractedData } from '@/types/request';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RequestCreate, RequestUpdate, OrderLine, ExtractedData, Request, CommodityGroup } from '@/types/request';
 import { useToast } from '@/hooks/use-toast';
 import { api } from '@/lib/api';
+import { getCurrencySymbol } from '@/lib/currency';
 
 interface RequestFormProps {
   extractedData?: ExtractedData;
-  onSuccess: () => void;
+  existingRequest?: Request;
+  mode?: 'create' | 'view';
+  onSuccess?: () => void;
+  onDelete?: () => void;
 }
 
-export const RequestForm = ({ extractedData, onSuccess }: RequestFormProps) => {
+export const RequestForm = ({ extractedData, existingRequest, mode = 'create', onSuccess, onDelete }: RequestFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [commodityGroups, setCommodityGroups] = useState<CommodityGroup[]>([]);
+  const [isLoadingGroups, setIsLoadingGroups] = useState(true);
+  const isViewMode = mode === 'view';
+  const isEditingExisting = Boolean(existingRequest);
 
-  const [formData, setFormData] = useState<RequestCreate>({
-    requestor_name: '',
-    title: '',
-    vendor_name: extractedData?.vendor_name || '',
-    vat_id: extractedData?.vat_id || '',
-    department: extractedData?.department || '',
-    total_cost: extractedData?.total_cost || 0,
-    order_lines: extractedData?.order_lines || [
-      { position_description: '', unit_price: 0, amount: 0, unit: '', total_price: 0 },
-    ],
+  const [formData, setFormData] = useState<RequestCreate>(() => {
+    if (existingRequest) {
+      return {
+        requestor_name: existingRequest.requestor_name,
+        title: existingRequest.title,
+        vendor_name: existingRequest.vendor_name,
+        vat_id: existingRequest.vat_id || '',
+        department: existingRequest.department || '',
+        total_cost: existingRequest.total_cost,
+        order_lines: existingRequest.order_lines?.length > 0 
+          ? existingRequest.order_lines 
+          : [{ position_description: '', unit_price: 0, amount: 0, unit: '', total_price: 0 }],
+        commodity_group_id: existingRequest.commodity_group_id,
+      };
+    }
+    
+    return {
+      requestor_name: extractedData?.vendor_name || '',
+      title: '',
+      vendor_name: extractedData?.vendor_name || '',
+      vat_id: extractedData?.vat_id || '',
+      department: extractedData?.requestor_department || '',
+      total_cost: extractedData?.total_cost || 0,
+      order_lines: extractedData?.order_lines || [
+        { position_description: '', unit_price: 0, amount: 0, unit: '', total_price: 0 },
+      ],
+      commodity_group_id: extractedData?.commodity_group,
+    };
   });
+  
+  const currentCurrency = existingRequest?.currency || extractedData?.currency;
+
+  useEffect(() => {
+    const fetchCommodityGroups = async () => {
+      try {
+        const groups = await api.getCommodityGroups();
+        setCommodityGroups(groups);
+      } catch (error) {
+        console.error('Failed to fetch commodity groups:', error);
+        toast({
+          title: 'Failed to load commodity groups',
+          description: 'Using form without commodity group options',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoadingGroups(false);
+      }
+    };
+
+    fetchCommodityGroups();
+  }, [toast]);
 
   const updateField = (field: keyof RequestCreate, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -71,20 +120,29 @@ export const RequestForm = ({ extractedData, onSuccess }: RequestFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    
     const total = calculateTotal();
     const dataToSubmit = { ...formData, total_cost: total };
 
     setIsSubmitting(true);
     try {
-      await api.createRequest(dataToSubmit);
-      toast({
-        title: 'Request created',
-        description: 'Procurement request submitted successfully',
-      });
-      onSuccess();
+      if (isEditingExisting && existingRequest?.id) {
+        await api.updateRequest(existingRequest.id, dataToSubmit);
+        toast({
+          title: 'Request updated',
+          description: 'Procurement request saved successfully',
+        });
+      } else {
+        await api.createRequest(dataToSubmit);
+        toast({
+          title: 'Request created',
+          description: 'Procurement request submitted successfully',
+        });
+      }
+      onSuccess?.();
     } catch (error) {
       toast({
-        title: 'Submission failed',
+        title: isEditingExisting ? 'Update failed' : 'Submission failed',
         description: error instanceof Error ? error.message : 'Unknown error',
         variant: 'destructive',
       });
@@ -147,6 +205,27 @@ export const RequestForm = ({ extractedData, onSuccess }: RequestFormProps) => {
         </div>
       </div>
 
+      <div>
+        <Label className="font-bold text-sm mb-2 block">COMMODITY GROUP</Label>
+        <Select
+          value={formData.commodity_group_id?.toString() || '0'}
+          onValueChange={(value) => updateField('commodity_group_id', value && value !== "0" ? parseInt(value) : undefined)}
+          disabled={isLoadingGroups}
+        >
+          <SelectTrigger className="border-heavy">
+            <SelectValue placeholder={isLoadingGroups ? "Loading..." : "Select commodity group"} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">No commodity group</SelectItem>
+            {commodityGroups && commodityGroups.length > 0 && commodityGroups.map((group) => (
+              <SelectItem key={group.id} value={group.id.toString()}>
+                {group.category} - {group.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="border-heavy p-4">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-bold text-lg">ORDER LINES</h3>
@@ -207,9 +286,13 @@ export const RequestForm = ({ extractedData, onSuccess }: RequestFormProps) => {
                   className="border-heavy"
                 />
                 <Input
-                  disabled
-                  value={`€${line.total_price.toFixed(2)}`}
-                  className="border-heavy mono bg-muted"
+                  required
+                  type="number"
+                  step="0.01"
+                  placeholder="Total Price"
+                  value={line.total_price || ''}
+                  onChange={(e) => updateOrderLine(index, 'total_price', parseFloat(e.target.value) || 0)}
+                  className="border-heavy mono"
                 />
               </div>
             </div>
@@ -219,18 +302,34 @@ export const RequestForm = ({ extractedData, onSuccess }: RequestFormProps) => {
 
       <div className="border-ultra p-4 bg-secondary">
         <div className="flex justify-between items-center">
-          <span className="font-bold text-xl">TOTAL COST</span>
-          <span className="mono font-bold text-2xl">€{calculateTotal().toFixed(2)}</span>
+          <span className="font-bold text-xl">TOTAL NET COST</span>
+          <span className="mono font-bold text-2xl">{getCurrencySymbol(currentCurrency)}{calculateTotal().toFixed(2)}</span>
         </div>
       </div>
 
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full border-ultra bg-accent text-accent-foreground hover:bg-accent/80 h-14 text-lg font-bold shadow-brutal"
-      >
-        {isSubmitting ? 'SUBMITTING...' : 'SUBMIT REQUEST'}
-      </Button>
+      <div className="flex gap-4">
+        {isEditingExisting && onDelete && (
+          <Button
+            type="button"
+            onClick={onDelete}
+            variant="destructive"
+            className="border-ultra h-14 text-lg font-bold shadow-brutal px-8"
+          >
+            <Trash className="w-5 h-5 mr-2" />
+            DELETE
+          </Button>
+        )}
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="flex-1 border-ultra bg-accent text-accent-foreground hover:bg-accent/80 h-14 text-lg font-bold shadow-brutal"
+        >
+          {isSubmitting 
+            ? (isEditingExisting ? 'SAVING...' : 'SUBMITTING...') 
+            : (isEditingExisting ? 'SAVE AND EXIT' : 'SUBMIT REQUEST')
+          }
+        </Button>
+      </div>
     </form>
   );
 };

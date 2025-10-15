@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     upload_dir: Path = Path("./app/uploads")
     max_upload_size_mb: int = 10
     api_prefix: str = "/api"
-    cors_origins: str = "http://localhost:5173,http://localhost:3000,http://localhost:8080"
+    cors_origins: str = "http://localhost:5173,http://localhost:3000,http://localhost:8080,http://localhost:8082"
     app_name: str = "Procurement Request System"
     app_version: str = "1.0.0"
 

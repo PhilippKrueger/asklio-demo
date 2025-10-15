@@ -25,8 +25,17 @@ export const CreateRequestDialog = ({ isOpen, onClose, onSuccess }: CreateReques
   const handleSuccess = () => {
     onSuccess();
     onClose();
+    resetDialog();
+  };
+
+  const resetDialog = () => {
     setExtractedData(undefined);
     setShowForm(false);
+  };
+
+  const handleClose = () => {
+    onClose();
+    resetDialog();
   };
 
   return (
@@ -34,7 +43,7 @@ export const CreateRequestDialog = ({ isOpen, onClose, onSuccess }: CreateReques
       <div className="bg-background border-ultra shadow-brutal-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
         <div className="border-b-4 border-black p-4 flex justify-between items-center sticky top-0 bg-background">
           <h2 className="font-bold text-2xl">CREATE NEW REQUEST</h2>
-          <Button onClick={onClose} variant="ghost" size="sm">
+          <Button onClick={handleClose} variant="ghost" size="sm">
             <X className="w-6 h-6" />
           </Button>
         </div>

@@ -98,10 +98,12 @@ class ExtractedData(BaseModel):
     """Data extracted from uploaded PDF."""
     vendor_name: str
     vat_id: Optional[str] = None
-    department: Optional[str] = None
+    requestor_department: Optional[str] = None
     order_lines: List[OrderLineCreate]
     total_cost: float = Field(..., gt=0)
+    currency: str = Field(default="EUR", description="Currency code (EUR, USD, etc.)")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Overall extraction confidence")
+    commodity_group: Optional[int] = None
 
 
 class PDFUploadResponse(BaseModel):

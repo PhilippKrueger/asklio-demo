@@ -16,8 +16,7 @@ class RequestService:
         request_data: RequestCreate,
         db: Session,
         pdf_path: Optional[str] = None,
-        pdf_filename: Optional[str] = None,
-        auto_classify: bool = True
+        pdf_filename: Optional[str] = None
     ) -> Request:
         """
         Create a new procurement request.
@@ -27,7 +26,6 @@ class RequestService:
             db: Database session
             pdf_path: Optional path to uploaded PDF
             pdf_filename: Optional original PDF filename
-            auto_classify: Whether to automatically classify commodity group
 
         Returns:
             Request: Created request object
@@ -35,17 +33,9 @@ class RequestService:
         Raises:
             ValueError: If validation fails
         """
-        # Auto-classify commodity group if not provided
+        # Use commodity group from request data (set by PDF extraction or manual input)
         commodity_group_id = request_data.commodity_group_id
         commodity_group_confidence = None
-
-        if auto_classify and not commodity_group_id:
-            commodity_groups = db.query(CommodityGroup).all()
-            classification = commodity_classifier.classify_request(
-                request_data, commodity_groups, db
-            )
-            commodity_group_id = classification.commodity_group_id
-            commodity_group_confidence = classification.confidence
 
         # Create request object
         request = Request(

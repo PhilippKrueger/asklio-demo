@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Request } from '@/types/request';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
+import { getCurrencySymbol } from '@/lib/currency';
+import { RequestDetailsDialog } from './RequestDetailsDialog';
 
 interface KanbanBoardProps {
   requests: Request[];
@@ -24,6 +26,8 @@ export const KanbanBoard = ({ requests, onUpdate }: KanbanBoardProps) => {
   const { toast } = useToast();
   const [draggedRequestId, setDraggedRequestId] = useState<number | null>(null);
   const [dragOverStatus, setDragOverStatus] = useState<string | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   // Normalize status to lowercase with underscores for comparison
   const normalizeStatus = (status: string) => {
@@ -65,13 +69,32 @@ export const KanbanBoard = ({ requests, onUpdate }: KanbanBoardProps) => {
 
   // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, requestId: number) => {
+    // Only allow drag if it's not a quick click
     setDraggedRequestId(requestId);
     e.dataTransfer.effectAllowed = 'move';
   };
 
+  const handleClick = (e: React.MouseEvent, request: Request) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleRequestClick(request);
+  };
+
+
   const handleDragEnd = () => {
     setDraggedRequestId(null);
     setDragOverStatus(null);
+  };
+
+  const handleRequestClick = (request: Request) => {
+    setSelectedRequest(request);
+    setIsDetailsOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setIsDetailsOpen(false);
+    setSelectedRequest(null);
+    onUpdate();
   };
 
   const handleDragOver = (e: React.DragEvent, status: string) => {
@@ -125,9 +148,11 @@ export const KanbanBoard = ({ requests, onUpdate }: KanbanBoardProps) => {
                 draggable
                 onDragStart={(e) => handleDragStart(e, request.id)}
                 onDragEnd={handleDragEnd}
-                className={`border-heavy bg-card p-3 shadow-brutal hover:shadow-brutal-lg transition-all cursor-move ${
+                onClick={(e) => handleClick(e, request)}
+                className={`border-heavy bg-card p-3 shadow-brutal hover:shadow-brutal-lg transition-all cursor-pointer ${
                   draggedRequestId === request.id ? 'opacity-50' : ''
                 }`}
+                title="Click to view details, drag to move"
               >
                 <div className="mb-2">
                   <div className="flex justify-between items-start mb-1">
@@ -135,6 +160,13 @@ export const KanbanBoard = ({ requests, onUpdate }: KanbanBoardProps) => {
                     <span className="mono text-xs">#{request.id}</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{request.vendor_name}</p>
+                  {request.commodity_group && (
+                    <div className="mt-1">
+                      <span className="inline-block bg-secondary text-xs px-2 py-1 border border-black font-mono">
+                        {request.commodity_group}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-1 text-xs mono">
@@ -152,7 +184,7 @@ export const KanbanBoard = ({ requests, onUpdate }: KanbanBoardProps) => {
                   </div>
                   <div className="flex justify-between border-t-2 border-black pt-1 mt-1">
                     <span>Total:</span>
-                    <span className="font-bold">€{request.total_cost.toFixed(2)}</span>
+                    <span className="font-bold">{getCurrencySymbol(request.currency)}{request.total_cost.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -160,6 +192,13 @@ export const KanbanBoard = ({ requests, onUpdate }: KanbanBoardProps) => {
           </div>
         </div>
       ))}
+      
+      <RequestDetailsDialog
+        request={selectedRequest}
+        isOpen={isDetailsOpen}
+        onClose={handleCloseDetails}
+        onUpdate={onUpdate}
+      />
     </div>
   );
 };

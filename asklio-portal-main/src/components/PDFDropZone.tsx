@@ -45,7 +45,7 @@ export const PDFDropZone = ({ onExtract }: PDFDropZoneProps) => {
     setFileName(file.name);
 
     try {
-      const result = await api.uploadPDF(file);
+      const result = await api.extractPDF(file);
       onExtract(result.extracted_data);
       toast({
         title: 'PDF processed',
