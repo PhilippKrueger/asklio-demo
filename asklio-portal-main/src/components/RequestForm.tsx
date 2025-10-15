@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, Trash } from 'lucide-react';
+import { Plus, Trash2, Trash, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,16 @@ import { RequestCreate, RequestUpdate, OrderLine, ExtractedData, Request, Commod
 import { useToast } from '@/hooks/use-toast';
 import { api } from '@/lib/api';
 import { getCurrencySymbol } from '@/lib/currency';
+import { 
+  validateTextLength, 
+  validateVatId, 
+  validateDepartment, 
+  validateNumericInput, 
+  validatePositionDescription, 
+  validateUnit,
+  VALIDATION_LIMITS,
+  ValidationResult 
+} from '@/lib/validation';
 
 interface RequestFormProps {
   extractedData?: ExtractedData;
@@ -18,12 +28,16 @@ interface RequestFormProps {
 }
 
 export const RequestForm = ({ extractedData, existingRequest, mode = 'create', onSuccess, onDelete }: RequestFormProps) => {
+  console.log('RequestForm - extractedData:', extractedData);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commodityGroups, setCommodityGroups] = useState<CommodityGroup[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState(true);
   const isViewMode = mode === 'view';
   const isEditingExisting = Boolean(existingRequest);
+  
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+  const [touchedFields, setTouchedFields] = useState<{ [key: string]: boolean }>({});
 
   const [formData, setFormData] = useState<RequestCreate>(() => {
     if (existingRequest) {
@@ -42,8 +56,8 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
     }
     
     return {
-      requestor_name: extractedData?.vendor_name || '',
-      title: '',
+      requestor_name: extractedData?.requestor_name || '',
+      title: extractedData?.title || '',
       vendor_name: extractedData?.vendor_name || '',
       vat_id: extractedData?.vat_id || '',
       department: extractedData?.requestor_department || '',
@@ -77,8 +91,32 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
     fetchCommodityGroups();
   }, [toast]);
 
+  const validateAndUpdateField = (field: keyof RequestCreate, value: any, validator?: (val: string) => ValidationResult) => {
+    setTouchedFields(prev => ({ ...prev, [field]: true }));
+    
+    if (validator && typeof value === 'string') {
+      const result = validator(value);
+      setValidationErrors(prev => ({
+        ...prev,
+        [field]: result.isValid ? '' : result.error || ''
+      }));
+      setFormData((prev) => ({ ...prev, [field]: result.sanitizedValue }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      setValidationErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
   const updateField = (field: keyof RequestCreate, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleFieldChange = (field: keyof RequestCreate, value: string, validator?: (val: string) => ValidationResult) => {
+    if (validator) {
+      validateAndUpdateField(field, value, validator);
+    } else {
+      updateField(field, value);
+    }
   };
 
   const addOrderLine = () => {
@@ -113,13 +151,101 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
     });
   };
 
+  const handleOrderLineChange = (index: number, field: keyof OrderLine, value: string) => {
+    const fieldKey = `orderLine_${index}_${field}`;
+    setTouchedFields(prev => ({ ...prev, [fieldKey]: true }));
+
+    let validationResult: ValidationResult | null = null;
+    let processedValue: any = value;
+
+    switch (field) {
+      case 'position_description':
+        validationResult = validatePositionDescription(value);
+        processedValue = validationResult.sanitizedValue;
+        break;
+      case 'unit':
+        validationResult = validateUnit(value);
+        processedValue = validationResult.sanitizedValue;
+        break;
+      case 'unit_price':
+      case 'amount':
+      case 'total_price':
+        validationResult = validateNumericInput(
+          value, 
+          field === 'unit_price' ? 'Unit Price' : 
+          field === 'amount' ? 'Amount' : 'Total Price',
+          0,
+          field === 'amount' ? VALIDATION_LIMITS.MAX_QUANTITY : VALIDATION_LIMITS.MAX_PRICE
+        );
+        processedValue = validationResult.sanitizedValue;
+        break;
+      default:
+        processedValue = value;
+    }
+
+    if (validationResult) {
+      setValidationErrors(prev => ({
+        ...prev,
+        [fieldKey]: validationResult!.isValid ? '' : validationResult!.error || ''
+      }));
+    }
+
+    updateOrderLine(index, field, processedValue);
+  };
+
   const calculateTotal = () => {
     return formData.order_lines.reduce((sum, line) => sum + line.total_price, 0);
+  };
+
+  const validateAllFields = (): boolean => {
+    const errors: { [key: string]: string } = {};
+    
+    // Validate main fields
+    const requestorNameResult = validateTextLength(formData.requestor_name, VALIDATION_LIMITS.REQUESTOR_NAME, 'Requestor Name');
+    if (!requestorNameResult.isValid) errors.requestor_name = requestorNameResult.error!;
+    
+    const titleResult = validateTextLength(formData.title, VALIDATION_LIMITS.TITLE, 'Title');
+    if (!titleResult.isValid) errors.title = titleResult.error!;
+    
+    const vendorNameResult = validateTextLength(formData.vendor_name, VALIDATION_LIMITS.VENDOR_NAME, 'Vendor Name');
+    if (!vendorNameResult.isValid) errors.vendor_name = vendorNameResult.error!;
+    
+    const vatIdResult = validateVatId(formData.vat_id || '');
+    if (!vatIdResult.isValid) errors.vat_id = vatIdResult.error!;
+    
+    const departmentResult = validateDepartment(formData.department || '');
+    if (!departmentResult.isValid) errors.department = departmentResult.error!;
+    
+    // Validate order lines
+    formData.order_lines.forEach((line, index) => {
+      const descResult = validatePositionDescription(line.position_description);
+      if (!descResult.isValid) errors[`orderLine_${index}_position_description`] = descResult.error!;
+      
+      const unitResult = validateUnit(line.unit);
+      if (!unitResult.isValid) errors[`orderLine_${index}_unit`] = unitResult.error!;
+      
+      const priceResult = validateNumericInput(line.unit_price.toString(), 'Unit Price', 0, VALIDATION_LIMITS.MAX_PRICE);
+      if (!priceResult.isValid) errors[`orderLine_${index}_unit_price`] = priceResult.error!;
+      
+      const amountResult = validateNumericInput(line.amount.toString(), 'Amount', 0, VALIDATION_LIMITS.MAX_QUANTITY);
+      if (!amountResult.isValid) errors[`orderLine_${index}_amount`] = amountResult.error!;
+    });
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!validateAllFields()) {
+      toast({
+        title: 'Validation Error',
+        description: 'Please fix the errors below before submitting',
+        variant: 'destructive',
+      });
+      return;
+    }
     
     const total = calculateTotal();
     const dataToSubmit = { ...formData, total_cost: total };
@@ -151,6 +277,20 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
     }
   };
 
+  const ErrorMessage = ({ fieldKey }: { fieldKey: string }) => {
+    const error = validationErrors[fieldKey];
+    const isTouched = touchedFields[fieldKey];
+    
+    if (!error || !isTouched) return null;
+    
+    return (
+      <div className="flex items-center gap-1 text-red-500 text-xs mt-1">
+        <AlertCircle className="w-3 h-3" />
+        <span>{error}</span>
+      </div>
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
@@ -158,19 +298,23 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
           <Label className="font-bold text-sm mb-2 block">REQUESTOR NAME</Label>
           <Input
             required
+            maxLength={VALIDATION_LIMITS.REQUESTOR_NAME}
             value={formData.requestor_name}
-            onChange={(e) => updateField('requestor_name', e.target.value)}
-            className="border-heavy"
+            onChange={(e) => handleFieldChange('requestor_name', e.target.value, (val) => validateTextLength(val, VALIDATION_LIMITS.REQUESTOR_NAME, 'Requestor Name'))}
+            className={`border-heavy ${validationErrors.requestor_name && touchedFields.requestor_name ? 'border-red-500' : ''}`}
           />
+          <ErrorMessage fieldKey="requestor_name" />
         </div>
         <div>
           <Label className="font-bold text-sm mb-2 block">DEPARTMENT</Label>
           <Input
             required
+            maxLength={VALIDATION_LIMITS.DEPARTMENT}
             value={formData.department}
-            onChange={(e) => updateField('department', e.target.value)}
-            className="border-heavy"
+            onChange={(e) => handleFieldChange('department', e.target.value, validateDepartment)}
+            className={`border-heavy ${validationErrors.department && touchedFields.department ? 'border-red-500' : ''}`}
           />
+          <ErrorMessage fieldKey="department" />
         </div>
       </div>
 
@@ -178,10 +322,12 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
         <Label className="font-bold text-sm mb-2 block">TITLE / SHORT DESCRIPTION</Label>
         <Input
           required
+          maxLength={VALIDATION_LIMITS.TITLE}
           value={formData.title}
-          onChange={(e) => updateField('title', e.target.value)}
-          className="border-heavy"
+          onChange={(e) => handleFieldChange('title', e.target.value, (val) => validateTextLength(val, VALIDATION_LIMITS.TITLE, 'Title'))}
+          className={`border-heavy ${validationErrors.title && touchedFields.title ? 'border-red-500' : ''}`}
         />
+        <ErrorMessage fieldKey="title" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -189,19 +335,23 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
           <Label className="font-bold text-sm mb-2 block">VENDOR NAME</Label>
           <Input
             required
+            maxLength={VALIDATION_LIMITS.VENDOR_NAME}
             value={formData.vendor_name}
-            onChange={(e) => updateField('vendor_name', e.target.value)}
-            className="border-heavy"
+            onChange={(e) => handleFieldChange('vendor_name', e.target.value, (val) => validateTextLength(val, VALIDATION_LIMITS.VENDOR_NAME, 'Vendor Name'))}
+            className={`border-heavy ${validationErrors.vendor_name && touchedFields.vendor_name ? 'border-red-500' : ''}`}
           />
+          <ErrorMessage fieldKey="vendor_name" />
         </div>
         <div>
           <Label className="font-bold text-sm mb-2 block">VAT ID</Label>
           <Input
             required
             value={formData.vat_id}
-            onChange={(e) => updateField('vat_id', e.target.value)}
-            className="border-heavy mono"
+            onChange={(e) => handleFieldChange('vat_id', e.target.value, validateVatId)}
+            className={`border-heavy mono ${validationErrors.vat_id && touchedFields.vat_id ? 'border-red-500' : ''}`}
+            placeholder="e.g., DE123456789"
           />
+          <ErrorMessage fieldKey="vat_id" />
         </div>
       </div>
 
@@ -240,60 +390,79 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
             <div key={index} className="border-heavy p-3 space-y-3">
               <div className="flex justify-between items-start">
                 <span className="mono font-bold text-sm">LINE {index + 1}</span>
-                {formData.order_lines.length > 1 && (
-                  <Button
-                    type="button"
-                    onClick={() => removeOrderLine(index)}
-                    variant="ghost"
-                    size="sm"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                )}
+                <Button
+                  type="button"
+                  onClick={() => removeOrderLine(index)}
+                  variant="ghost"
+                  size="sm"
+                  disabled={formData.order_lines.length === 1}
+                  title={formData.order_lines.length === 1 ? "Cannot delete last line item" : "Delete line item"}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
               </div>
 
               <Input
                 required
+                maxLength={VALIDATION_LIMITS.POSITION_DESCRIPTION}
                 placeholder="Position Description"
                 value={line.position_description}
-                onChange={(e) => updateOrderLine(index, 'position_description', e.target.value)}
-                className="border-heavy"
+                onChange={(e) => handleOrderLineChange(index, 'position_description', e.target.value)}
+                className={`border-heavy ${validationErrors[`orderLine_${index}_position_description`] && touchedFields[`orderLine_${index}_position_description`] ? 'border-red-500' : ''}`}
               />
+              <ErrorMessage fieldKey={`orderLine_${index}_position_description`} />
 
               <div className="grid grid-cols-4 gap-2">
-                <Input
-                  required
-                  type="number"
-                  step="0.01"
-                  placeholder="Unit Price"
-                  value={line.unit_price || ''}
-                  onChange={(e) => updateOrderLine(index, 'unit_price', parseFloat(e.target.value) || 0)}
-                  className="border-heavy mono"
-                />
-                <Input
-                  required
-                  type="number"
-                  placeholder="Amount"
-                  value={line.amount || ''}
-                  onChange={(e) => updateOrderLine(index, 'amount', parseFloat(e.target.value) || 0)}
-                  className="border-heavy mono"
-                />
-                <Input
-                  required
-                  placeholder="Unit"
-                  value={line.unit}
-                  onChange={(e) => updateOrderLine(index, 'unit', e.target.value)}
-                  className="border-heavy"
-                />
-                <Input
-                  required
-                  type="number"
-                  step="0.01"
-                  placeholder="Total Price"
-                  value={line.total_price || ''}
-                  onChange={(e) => updateOrderLine(index, 'total_price', parseFloat(e.target.value) || 0)}
-                  className="border-heavy mono"
-                />
+                <div>
+                  <Input
+                    required
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max={VALIDATION_LIMITS.MAX_PRICE}
+                    placeholder="Unit Price"
+                    value={line.unit_price || ''}
+                    onChange={(e) => handleOrderLineChange(index, 'unit_price', e.target.value)}
+                    className={`border-heavy mono ${validationErrors[`orderLine_${index}_unit_price`] && touchedFields[`orderLine_${index}_unit_price`] ? 'border-red-500' : ''}`}
+                  />
+                  <ErrorMessage fieldKey={`orderLine_${index}_unit_price`} />
+                </div>
+                <div>
+                  <Input
+                    required
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max={VALIDATION_LIMITS.MAX_QUANTITY}
+                    placeholder="Amount"
+                    value={line.amount || ''}
+                    onChange={(e) => handleOrderLineChange(index, 'amount', e.target.value)}
+                    className={`border-heavy mono ${validationErrors[`orderLine_${index}_amount`] && touchedFields[`orderLine_${index}_amount`] ? 'border-red-500' : ''}`}
+                  />
+                  <ErrorMessage fieldKey={`orderLine_${index}_amount`} />
+                </div>
+                <div>
+                  <Input
+                    required
+                    maxLength={VALIDATION_LIMITS.UNIT}
+                    placeholder="Unit"
+                    value={line.unit}
+                    onChange={(e) => handleOrderLineChange(index, 'unit', e.target.value)}
+                    className={`border-heavy ${validationErrors[`orderLine_${index}_unit`] && touchedFields[`orderLine_${index}_unit`] ? 'border-red-500' : ''}`}
+                  />
+                  <ErrorMessage fieldKey={`orderLine_${index}_unit`} />
+                </div>
+                <div>
+                  <Input
+                    required
+                    type="number"
+                    step="0.01"
+                    placeholder="Total Price"
+                    value={line.total_price || ''}
+                    readOnly
+                    className="border-heavy mono bg-gray-50"
+                  />
+                </div>
               </div>
             </div>
           ))}

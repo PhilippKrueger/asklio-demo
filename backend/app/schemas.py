@@ -83,10 +83,7 @@ class Request(RequestBase):
     """Complete request schema for responses."""
     id: int
     commodity_group_id: Optional[int] = None
-    commodity_group_confidence: Optional[float] = Field(None, ge=0.0, le=1.0)
     status: str
-    pdf_path: Optional[str] = None
-    pdf_filename: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     order_lines: List[OrderLine] = []
@@ -98,7 +95,9 @@ class ExtractedData(BaseModel):
     """Data extracted from uploaded PDF."""
     vendor_name: str
     vat_id: Optional[str] = None
+    requestor_name: Optional[str] = None
     requestor_department: Optional[str] = None
+    title: Optional[str] = None
     order_lines: List[OrderLineCreate]
     total_cost: float = Field(..., gt=0)
     currency: str = Field(default="EUR", description="Currency code (EUR, USD, etc.)")

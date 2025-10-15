@@ -49,7 +49,7 @@ class TestPDFExtraction:
         pytest.param(
             "Quote_1__Lio_Technologies_GmbH__1x_MBA___2212618452.pdf",
             {
-                "vendor_name": "Apple",
+                "vendor_name": "Apple GmbH",
                 "vat_id": "DE258811348",
                 "commodity_group": 29,
                 "order_lines": [

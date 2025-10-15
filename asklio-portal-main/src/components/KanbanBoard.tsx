@@ -17,8 +17,8 @@ const statusLabels = {
 };
 
 const statusColors = {
-  open: 'bg-status-open',
-  in_progress: 'bg-status-progress',
+  open: 'bg-status-progress',
+  in_progress: 'bg-status-open',
   closed: 'bg-status-closed',
 };
 

@@ -64,6 +64,14 @@ export const RequestDetailsDialog = ({ request, isOpen, onClose, onUpdate }: Req
             <DialogTitle className="font-bold text-xl">
               REQUEST #{request.id} - {request.title}
             </DialogTitle>
+            <div className="text-sm text-muted-foreground space-y-1 mt-2">
+              <div>
+                <strong>Created:</strong> {new Date(request.created_at).toLocaleString()}
+              </div>
+              <div>
+                <strong>Updated:</strong> {new Date(request.updated_at).toLocaleString()}
+              </div>
+            </div>
           </DialogHeader>
           
           <RequestForm 

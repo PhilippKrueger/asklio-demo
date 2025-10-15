@@ -1,9 +1,7 @@
 """API endpoints for procurement requests."""
 from typing import List, Optional
-from pathlib import Path
 import shutil
-from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -196,89 +194,6 @@ async def extract_pdf_data(
             detail=f"Failed to extract data from PDF: {str(e)}"
         )
 
-
-@router.post("/upload", response_model=RequestSchema, status_code=201)
-async def upload_pdf_and_create_request(
-    file: UploadFile = File(...),
-    requestor_name: str = Form(...),
-    title: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    """
-    Upload a PDF, extract data, and create a procurement request.
-
-    This endpoint combines PDF extraction with request creation in one step.
-    The commodity group is automatically classified from the extracted order lines.
-
-    Args:
-        file: PDF file upload
-        requestor_name: Name of the person making the request
-        title: Title/description of the request
-        db: Database session
-
-    Returns:
-        Created request with extracted data
-    """
-    # Validate file type
-    if not file.filename.lower().endswith('.pdf'):
-        raise HTTPException(
-            status_code=400,
-            detail="Only PDF files are allowed"
-        )
-
-    # Create storage directories
-    temp_dir = settings.upload_dir / "temp"
-    permanent_dir = settings.upload_dir / "pdfs"
-    temp_dir.mkdir(parents=True, exist_ok=True)
-    permanent_dir.mkdir(parents=True, exist_ok=True)
-
-    temp_file_path = temp_dir / file.filename
-    permanent_file_path = permanent_dir / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
-
-    try:
-        # Save uploaded file temporarily
-        with open(temp_file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        # Extract data from PDF (includes commodity classification)
-        extracted_data = pdf_extractor.extract_from_pdf(str(temp_file_path))
-
-        # Move file to permanent storage
-        shutil.move(str(temp_file_path), str(permanent_file_path))
-
-        # Create request data from extracted data
-        request_data = RequestCreate(
-            requestor_name=requestor_name,
-            title=title,
-            vendor_name=extracted_data.vendor_name,
-            vat_id=extracted_data.vat_id,
-            department=extracted_data.requestor_department,
-            total_cost=extracted_data.total_cost,
-            order_lines=extracted_data.order_lines,
-            commodity_group_id=extracted_data.commodity_group
-        )
-
-        # Create request with PDF data (commodity group already classified during extraction)
-        request = request_service.create_request(
-            request_data=request_data,
-            db=db,
-            pdf_path=str(permanent_file_path),
-            pdf_filename=file.filename
-        )
-
-        return request
-
-    except Exception as e:
-        # Clean up files on error
-        if temp_file_path.exists():
-            temp_file_path.unlink()
-        if permanent_file_path.exists():
-            permanent_file_path.unlink()
-        
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to process PDF and create request: {str(e)}"
-        )
 
 
 @router.delete("/{request_id}", response_model=MessageResponse)

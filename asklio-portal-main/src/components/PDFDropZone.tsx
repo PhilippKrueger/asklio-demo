@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Upload, FileText, X } from 'lucide-react';
+import { Upload, FileText, X, Loader2 } from 'lucide-react';
 import { ExtractedData } from '@/types/request';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
@@ -106,21 +106,34 @@ export const PDFDropZone = ({ onExtract }: PDFDropZoneProps) => {
       />
 
       <div className="flex flex-col items-center justify-center gap-4 pointer-events-none">
-        {fileName ? (
+        {isProcessing ? (
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative">
+              <Loader2 className="w-16 h-16 animate-spin text-accent" />
+              <FileText className="w-8 h-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            </div>
+            <div className="text-center space-y-2">
+              <p className="font-bold text-lg animate-pulse">EXTRACTING DATA</p>
+              <p className="text-sm mono">{fileName}</p>
+              <div className="flex gap-1 justify-center mt-2">
+                <span className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+              </div>
+            </div>
+          </div>
+        ) : fileName ? (
           <>
             <FileText className="w-12 h-12" />
             <div className="flex items-center gap-2">
               <span className="mono text-sm font-bold">{fileName}</span>
-              {!isProcessing && (
-                <button
-                  onClick={clearFile}
-                  className="pointer-events-auto hover:bg-muted p-1"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
+              <button
+                onClick={clearFile}
+                className="pointer-events-auto hover:bg-muted p-1"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-            {isProcessing && <span className="text-sm font-bold">PROCESSING...</span>}
           </>
         ) : (
           <>

@@ -66,6 +66,7 @@ class FullDocumentStructure(BaseModel):
     requestor: CompanyEntity
     order_lines: List[OrderLineDetailed]
     document_type: Literal["quote", "offer", "invoice", "order"]
+    document_title: Optional[str] = Field(None, description="Short descriptive title for the document/request")
     document_date: Optional[str] = None
     document_number: Optional[str] = None
     payment_terms: Optional[str] = None
@@ -397,6 +398,12 @@ class PDFExtractor:
         prompt = ChatPromptTemplate.from_messages([
             ("system", """You are an expert at analyzing procurement documents.
             
+            TITLE EXTRACTION:
+            - Generate a concise, descriptive title (3-6 words) for this procurement request
+            - Base the title on the main products/services being procured
+            - Examples: "Software Development Services", "Office Equipment", "IT Infrastructure Upgrade"
+            - Focus on what is being procured, not the vendor name
+            
             CRITICAL DISTINCTION - Identify the roles:
             
             VENDOR (Seller/Supplier) - THE DOCUMENT ISSUER:
@@ -407,12 +414,21 @@ class PDFExtractor:
             - Uses phrases: "we offer", "our quote", "our products", "our services"
             - Bank details belong to this company
             - Issues invoices, quotes, offers
+            - "Bearbeiter" or "Sachbearbeiter" is the vendor's employee processing the document, NOT the requestor
             
             REQUESTOR (Buyer/Customer) - THE DOCUMENT RECIPIENT:
-            - Appears after "To:", "An:", "Kunde:", "Customer:", "Auftraggeber:"
-            - Receiving/buying party
-            - Their department/contact may be mentioned
-            - NOT the document issuer
+            - CRITICAL: The requestor is the RECIPIENT of the quote/offer, NOT the "Bearbeiter"
+            - Appears in the ADDRESS BLOCK on the LEFT side of the document header
+            - Look for the name/company after "An:", "To:", "Kunde:", "Customer:", "Auftraggeber:"
+            - The person's name in the recipient address block
+            - This is who the document is addressed TO, not who created it
+            - IMPORTANT: Extract department/division information (e.g., "IT Department", "Procurement", "Finance")
+            - Department often appears on line below company name or with person's title
+            - Look for words like "Abteilung", "Department", "Division", "Team", "Unit"
+            - If no explicit department, use job title or role if available
+            - Receiving/buying party who RECEIVES the quote
+            - DO NOT confuse with "Bearbeiter" (processor) who works for the vendor
+            - Extract both the contact person name AND department - both are important
             
             VENDOR NAME EXTRACTION RULES (PRIORITY ORDER):
             1. HIGHEST PRIORITY: Check document footer/bottom for company name near VAT ID
@@ -472,6 +488,9 @@ class PDFExtractor:
         
         # Debug logging to see what LLM returns
         logger.debug("=== LLM EXTRACTION RESULT ===")
+        logger.debug("Vendor: %s | VAT: %s | Role: %s", result.vendor.name, result.vendor.vat_id, result.vendor.role)
+        logger.debug("Requestor: %s | Dept: %s | Contact: %s | Role: %s", 
+                    result.requestor.name, result.requestor.department, result.requestor.contact_person, result.requestor.role)
         logger.debug("Order lines count: %d", len(result.order_lines))
         for i, line in enumerate(result.order_lines):
             logger.debug("  Line %d: %s... | qty:%s | unit_price:%s | total:%s", 
@@ -504,7 +523,9 @@ class PDFExtractor:
         return ExtractedData(
             vendor_name=full_structure.vendor.name,
             vat_id=full_structure.vendor.vat_id,
+            requestor_name=full_structure.requestor.contact_person or full_structure.requestor.name,
             requestor_department=full_structure.requestor.department,
+            title=full_structure.document_title,
             order_lines=order_lines,
             total_cost=full_structure.total_gross,
             currency=full_structure.currency,

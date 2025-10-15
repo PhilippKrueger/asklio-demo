@@ -41,19 +41,6 @@ export const api = {
     return response.json();
   },
 
-  async uploadPDF(file: File, requestorName: string, title: string): Promise<Request> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('requestor_name', requestorName);
-    formData.append('title', title);
-
-    const response = await fetch(`${API_BASE_URL}/requests/upload`, {
-      method: 'POST',
-      body: formData,
-    });
-    if (!response.ok) throw new Error('Failed to upload PDF');
-    return response.json();
-  },
 
   async updateStatus(id: number, status: string): Promise<Request> {
     const response = await fetch(`${API_BASE_URL}/requests/${id}/status`, {

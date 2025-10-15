@@ -53,7 +53,9 @@ export interface RequestUpdate {
 export interface ExtractedData {
   vendor_name?: string;
   vat_id?: string;
+  requestor_name?: string;
   requestor_department?: string;
+  title?: string;
   order_lines?: OrderLine[];
   total_cost?: number;
   currency?: string;
