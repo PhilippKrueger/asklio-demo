@@ -20,11 +20,16 @@
 
 ## Development Setup
 
+Both Docker and development environments use the same URLs:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+
 ### Backend
 ```bash
 cd backend
 uv sync
-uv run uvicorn main:app --reload
+uv run uvicorn main:app --reload --port 8000
 ```
 
 ### Frontend

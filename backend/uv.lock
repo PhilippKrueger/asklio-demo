@@ -140,51 +140,6 @@ wheels = [
 ]
 
 [[package]]
-name = "cffi"
-version = "2.0.0"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-dependencies = [
-    { name = "pycparser", marker = "implementation_name != 'PyPy'" },
-]
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/44d/1b5909021139f/cffi-2.0.0.tar.gz", hash = "sha256:44d1b5909021139fe36001ae048dbdde8214afa20200eda0f64c068cac5d5529" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/00b/df7acc5f79515/cffi-2.0.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:00bdf7acc5f795150faa6957054fbbca2439db2f775ce831222b66f192f03beb" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/45d/5e886156860dc/cffi-2.0.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:45d5e886156860dc35862657e1494b9bae8dfa63bf56796f2fb56e1679fc0bca" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/07b/271772c100085/cffi-2.0.0-cp313-cp313-manylinux1_i686.manylinux2014_i686.manylinux_2_17_i686.manylinux_2_5_i686.whl", hash = "sha256:07b271772c100085dd28b74fa0cd81c8fb1a3ba18b21e03d7c27f3436a10606b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/d48/a880098c96020/cffi-2.0.0-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:d48a880098c96020b02d5a1f7d9251308510ce8858940e6fa99ece33f610838b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/f93/fd8e5c8c0a4aa/cffi-2.0.0-cp313-cp313-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl", hash = "sha256:f93fd8e5c8c0a4aa1f424d6173f14a892044054871c771f8566e4008eaa359d2" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/dd4/f05f54a52fb55/cffi-2.0.0-cp313-cp313-manylinux2014_s390x.manylinux_2_17_s390x.whl", hash = "sha256:dd4f05f54a52fb558f1ba9f528228066954fee3ebe629fc1660d874d040ae5a3" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/c8d/3b5532fc71b7a/cffi-2.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:c8d3b5532fc71b7a77c09192b4a5a200ea992702734a2e9279a37f2478236f26" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/d9b/29c1f0ae438d5/cffi-2.0.0-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:d9b29c1f0ae438d5ee9acb31cadee00a58c46cc9c0b2f9038c6b0b3470877a8c" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/6d5/0360be4546678/cffi-2.0.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:6d50360be4546678fc1b79ffe7a66265e28667840010348dd69a314145807a1b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/74a/03b9698e198d4/cffi-2.0.0-cp313-cp313-win32.whl", hash = "sha256:74a03b9698e198d47562765773b4a8309919089150a0bb17d829ad7b44b60d27" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/19f/705ada2530c11/cffi-2.0.0-cp313-cp313-win_amd64.whl", hash = "sha256:19f705ada2530c1167abacb171925dd886168931e0a7b78f5bffcae5c6b5be75" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/256/f80b80ca3853f/cffi-2.0.0-cp313-cp313-win_arm64.whl", hash = "sha256:256f80b80ca3853f90c21b23ee78cd008713787b1b1e93eae9f3d6a7134abd91" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/fc3/3c5141b55ed36/cffi-2.0.0-cp314-cp314-macosx_10_13_x86_64.whl", hash = "sha256:fc33c5141b55ed366cfaad382df24fe7dcbc686de5be719b207bb248e3053dc5" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/c65/4de545946e0db/cffi-2.0.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:c654de545946e0db659b3400168c9ad31b5d29593291482c43e3564effbcee13" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/24b/6f81f1983e6df/cffi-2.0.0-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:24b6f81f1983e6df8db3adc38562c83f7d4a0c36162885ec7f7b77c7dcbec97b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/128/73ca6cb9b0f0d/cffi-2.0.0-cp314-cp314-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl", hash = "sha256:12873ca6cb9b0f0d3a0da705d6086fe911591737a59f28b7936bdfed27c0d47c" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/d9b/97165e8aed927/cffi-2.0.0-cp314-cp314-manylinux2014_s390x.manylinux_2_17_s390x.whl", hash = "sha256:d9b97165e8aed9272a6bb17c01e3cc5871a594a446ebedc996e2397a1c1ea8ef" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/afb/8db5439b81cf9/cffi-2.0.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:afb8db5439b81cf9c9d0c80404b60c3cc9c3add93e114dcae767f1477cb53775" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/737/fe7d37e1a1bff/cffi-2.0.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:737fe7d37e1a1bffe70bd5754ea763a62a066dc5913ca57e957824b72a85e205" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/381/00abb9d1b1435/cffi-2.0.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:38100abb9d1b1435bc4cc340bb4489635dc2f0da7456590877030c9b3d40b0c1" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/087/067fa8953339c/cffi-2.0.0-cp314-cp314-win32.whl", hash = "sha256:087067fa8953339c723661eda6b54bc98c5625757ea62e95eb4898ad5e776e9f" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/203/a48d1fb583fc7/cffi-2.0.0-cp314-cp314-win_amd64.whl", hash = "sha256:203a48d1fb583fc7d78a4c6655692963b860a417c0528492a6bc21f1aaefab25" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/dbd/5c7a25a7cb98f/cffi-2.0.0-cp314-cp314-win_arm64.whl", hash = "sha256:dbd5c7a25a7cb98f5ca55d258b103a2054f859a46ae11aaf23134f9cc0d356ad" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/9a6/7fc9e8eb39039/cffi-2.0.0-cp314-cp314t-macosx_10_13_x86_64.whl", hash = "sha256:9a67fc9e8eb39039280526379fb3a70023d77caec1852002b4da7e8b270c4dd9" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/7a6/6c7204d886929/cffi-2.0.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:7a66c7204d8869299919db4d5069a82f1561581af12b11b3c9f48c584eb8743d" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/7cc/09976e8b56f8c/cffi-2.0.0-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:7cc09976e8b56f8cebd752f7113ad07752461f48a58cbba644139015ac24954c" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/92b/68146a71df785/cffi-2.0.0-cp314-cp314t-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl", hash = "sha256:92b68146a71df78564e4ef48af17551a5ddd142e5190cdf2c5624d0c3ff5b2e8" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/b1e/74d11748e7e98/cffi-2.0.0-cp314-cp314t-manylinux2014_s390x.manylinux_2_17_s390x.whl", hash = "sha256:b1e74d11748e7e98e2f426ab176d4ed720a64412b6a15054378afdb71e0f37dc" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/28a/3a209b96630bc/cffi-2.0.0-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:28a3a209b96630bca57cce802da70c266eb08c6e97e5afd61a75611ee6c64592" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/755/3fb2090d71822/cffi-2.0.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:7553fb2090d71822f02c629afe6042c299edf91ba1bf94951165613553984512" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/6c6/c373cfc5c83a9/cffi-2.0.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:6c6c373cfc5c83a975506110d17457138c8c63016b563cc9ed6e056a82f13ce4" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/1fc/9ea04857caf66/cffi-2.0.0-cp314-cp314t-win32.whl", hash = "sha256:1fc9ea04857caf665289b7a75923f2c6ed559b8298a1b8c49e59f7dd95c8481e" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/d68/b6cef7827e864/cffi-2.0.0-cp314-cp314t-win_amd64.whl", hash = "sha256:d68b6cef7827e8641e8ef16f4494edda8b36104d79773a334beaa1e3521430f6" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/0a1/527a803f0a659/cffi-2.0.0-cp314-cp314t-win_arm64.whl", hash = "sha256:0a1527a803f0a659de1af2e1fd700213caba79377e27e4693648c2923da066f9" },
-]
-
-[[package]]
 name = "charset-normalizer"
 version = "3.4.3"
 source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
@@ -237,62 +192,6 @@ wheels = [
 ]
 
 [[package]]
-name = "cryptography"
-version = "46.0.2"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-dependencies = [
-    { name = "cffi", marker = "platform_python_implementation != 'PyPy'" },
-]
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/21b/6fc8c71a3f9a6/cryptography-46.0.2.tar.gz", hash = "sha256:21b6fc8c71a3f9a604f028a329e5560009cc4a3a828bfea5fcba8eb7647d88fe" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/f3e/32ab7dd1b1ef6/cryptography-46.0.2-cp311-abi3-macosx_10_9_universal2.whl", hash = "sha256:f3e32ab7dd1b1ef67b9232c4cf5e2ee4cd517d4316ea910acaaa9c5712a1c663" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/1fd/1a69086926b62/cryptography-46.0.2-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:1fd1a69086926b623ef8126b4c33d5399ce9e2f3fac07c9c734c2a4ec38b6d02" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/bb7/fb9cd44c2582a/cryptography-46.0.2-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:bb7fb9cd44c2582aa5990cf61a4183e6f54eea3172e54963787ba47287edd135" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/906/6cfd7f146f291/cryptography-46.0.2-cp311-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:9066cfd7f146f291869a9898b01df1c9b0e314bfa182cef432043f13fc462c92" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/97e/83bf4f2f2c084/cryptography-46.0.2-cp311-abi3-manylinux_2_28_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:97e83bf4f2f2c084d8dd792d13841d0a9b241643151686010866bbd076b19659" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/4a7/66d2a5d812736/cryptography-46.0.2-cp311-abi3-manylinux_2_28_ppc64le.whl", hash = "sha256:4a766d2a5d8127364fd936572c6e6757682fc5dfcbdba1632d4554943199f2fa" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/fab/8f805e9675e61/cryptography-46.0.2-cp311-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:fab8f805e9675e61ed8538f192aad70500fa6afb33a8803932999b1049363a08" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/1e3/b6428a3d56043/cryptography-46.0.2-cp311-abi3-manylinux_2_34_aarch64.whl", hash = "sha256:1e3b6428a3d56043bff0bb85b41c535734204e599c1c0977e1d0f261b02f3ad5" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/1a8/8634851d9b8de/cryptography-46.0.2-cp311-abi3-manylinux_2_34_ppc64le.whl", hash = "sha256:1a88634851d9b8de8bb53726f4300ab191d3b2f42595e2581a54b26aba71b7cc" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/be9/39b99d4e091ee/cryptography-46.0.2-cp311-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:be939b99d4e091eec9a2bcf41aaf8f351f312cd19ff74b5c83480f08a8a43e0b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/9f1/3b040649bc18e/cryptography-46.0.2-cp311-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:9f13b040649bc18e7eb37936009b24fd31ca095a5c647be8bb6aaf1761142bd1" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/9bd/c25e4e01b261a/cryptography-46.0.2-cp311-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:9bdc25e4e01b261a8fda4e98618f1c9515febcecebc9566ddf4a70c63967043b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/8b9/bf67b11ef9e28/cryptography-46.0.2-cp311-abi3-win32.whl", hash = "sha256:8b9bf67b11ef9e28f4d78ff88b04ed0929fcd0e4f70bb0f704cfc32a5c6311ee" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/758/cfc7f4c38c5c5/cryptography-46.0.2-cp311-abi3-win_amd64.whl", hash = "sha256:758cfc7f4c38c5c5274b55a57ef1910107436f4ae842478c4989abbd24bd5acb" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/218/abd64a2e72f84/cryptography-46.0.2-cp311-abi3-win_arm64.whl", hash = "sha256:218abd64a2e72f8472c2102febb596793347a3e65fafbb4ad50519969da44470" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/bda/55e8dbe853393/cryptography-46.0.2-cp314-cp314t-macosx_10_9_universal2.whl", hash = "sha256:bda55e8dbe8533937956c996beaa20266a8eca3570402e52ae52ed60de1faca8" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/e71/55c0b004e936d/cryptography-46.0.2-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:e7155c0b004e936d381b15425273aee1cebc94f879c0ce82b0d7fecbf755d53a" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/a61/c154cc5488272/cryptography-46.0.2-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:a61c154cc5488272a6c4b86e8d5beff4639cdb173d75325ce464d723cda0052b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/9ec/3f2e2173f36a9/cryptography-46.0.2-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:9ec3f2e2173f36a9679d3b06d3d01121ab9b57c979de1e6a244b98d51fea1b20" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/2fa/fb6aa24e702bb/cryptography-46.0.2-cp314-cp314t-manylinux_2_28_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:2fafb6aa24e702bbf74de4cb23bfa2c3beb7ab7683a299062b69724c92e0fa73" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/0c7/ffe8c9b1fcbb0/cryptography-46.0.2-cp314-cp314t-manylinux_2_28_ppc64le.whl", hash = "sha256:0c7ffe8c9b1fcbb07a26d7c9fa5e857c2fe80d72d7b9e0353dcf1d2180ae60ee" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/584/0f05518caa86b/cryptography-46.0.2-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:5840f05518caa86b09d23f8b9405a7b6d5400085aa14a72a98fdf5cf1568c0d2" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/27c/53b4f6a682a1b/cryptography-46.0.2-cp314-cp314t-manylinux_2_34_aarch64.whl", hash = "sha256:27c53b4f6a682a1b645fbf1cd5058c72cf2f5aeba7d74314c36838c7cbc06e0f" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/512/c0250065e0a6b/cryptography-46.0.2-cp314-cp314t-manylinux_2_34_ppc64le.whl", hash = "sha256:512c0250065e0a6b286b2db4bbcc2e67d810acd53eb81733e71314340366279e" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/07c/0eb6657c0e9cc/cryptography-46.0.2-cp314-cp314t-manylinux_2_34_x86_64.whl", hash = "sha256:07c0eb6657c0e9cca5891f4e35081dbf985c8131825e21d99b4f440a8f496f36" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/48b/983089378f50c/cryptography-46.0.2-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:48b983089378f50cba258f7f7aa28198c3f6e13e607eaf10472c26320332ca9a" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/e6f/6775eaaa08c0e/cryptography-46.0.2-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:e6f6775eaaa08c0eec73e301f7592f4367ccde5e4e4df8e58320f2ebf161ea2c" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/e86/33996579961f9/cryptography-46.0.2-cp314-cp314t-win32.whl", hash = "sha256:e8633996579961f9b5a3008683344c2558d38420029d3c0bc7ff77c17949a4e1" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/48c/01988ecbb3297/cryptography-46.0.2-cp314-cp314t-win_amd64.whl", hash = "sha256:48c01988ecbb32979bb98731f5c2b2f79042a6c58cc9a319c8c2f9987c7f68f9" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/8e2/ad4d1a5899b7c/cryptography-46.0.2-cp314-cp314t-win_arm64.whl", hash = "sha256:8e2ad4d1a5899b7caa3a450e33ee2734be7cc0689010964703a7c4bcc8dd4fd0" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/a08/e7401a94c002e/cryptography-46.0.2-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:a08e7401a94c002e79dc3bc5231b6558cd4b2280ee525c4673f650a37e2c7685" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/d30/bc11d35743bf4/cryptography-46.0.2-cp38-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:d30bc11d35743bf4ddf76674a0a369ec8a21f87aaa09b0661b04c5f6c46e8d7b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/bca/3f0ce67e5a2a2/cryptography-46.0.2-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:bca3f0ce67e5a2a2cf524e86f44697c4323a86e0fd7ba857de1c30d52c11ede1" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/ff7/98ad7a957a502/cryptography-46.0.2-cp38-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:ff798ad7a957a5021dcbab78dfff681f0cf15744d0e6af62bd6746984d9c9e9c" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/cb5/e8daac840e887/cryptography-46.0.2-cp38-abi3-manylinux_2_28_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:cb5e8daac840e8879407acbe689a174f5ebaf344a062f8918e526824eb5d97af" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/3f3/7aa12b2d91e15/cryptography-46.0.2-cp38-abi3-manylinux_2_28_ppc64le.whl", hash = "sha256:3f37aa12b2d91e157827d90ce78f6180f0c02319468a0aea86ab5a9566da644b" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/5e3/8f203160a48b9/cryptography-46.0.2-cp38-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:5e38f203160a48b93010b07493c15f2babb4e0f2319bbd001885adb3f3696d21" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/d19/f5f48883752b5/cryptography-46.0.2-cp38-abi3-manylinux_2_34_aarch64.whl", hash = "sha256:d19f5f48883752b5ab34cff9e2f7e4a7f216296f33714e77d1beb03d108632b6" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/049/11b149eae142c/cryptography-46.0.2-cp38-abi3-manylinux_2_34_ppc64le.whl", hash = "sha256:04911b149eae142ccd8c9a68892a70c21613864afb47aba92d8c7ed9cc001023" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/8b1/6c1ede6a937c2/cryptography-46.0.2-cp38-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:8b16c1ede6a937c291d41176934268e4ccac2c6521c69d3f5961c5a1e11e039e" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/747/b6f4a4a23d5a2/cryptography-46.0.2-cp38-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:747b6f4a4a23d5a215aadd1d0b12233b4119c4313df83ab4137631d43672cc90" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/6b2/75e398ab3a790/cryptography-46.0.2-cp38-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:6b275e398ab3a7905e168c036aad54b5969d63d3d9099a0a66cc147a3cc983be" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/0b5/07c8e033307e3/cryptography-46.0.2-cp38-abi3-win32.whl", hash = "sha256:0b507c8e033307e37af61cb9f7159b416173bdf5b41d11c4df2e499a1d8e007c" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/f9b/2dc7668418fb6/cryptography-46.0.2-cp38-abi3-win_amd64.whl", hash = "sha256:f9b2dc7668418fb6f221e4bf701f716e05e8eadb4f1988a2487b11aedf8abe62" },
-    { url = "http://172.16.121.157:4242/root/pypi/+f/914/47f2b17e83c9e/cryptography-46.0.2-cp38-abi3-win_arm64.whl", hash = "sha256:91447f2b17e83c9e0c89f133119d83f94ce6e0fb55dd47da0a959316e6e9cfa1" },
-]
-
-[[package]]
 name = "dataclasses-json"
 version = "0.6.7"
 source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
@@ -303,18 +202,6 @@ dependencies = [
 sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/b6b/3e528266ea45b/dataclasses_json-0.6.7.tar.gz", hash = "sha256:b6b3e528266ea45b9535223bc53ca645f5208833c29229e847b3f26a1cc55fc0" }
 wheels = [
     { url = "http://172.16.121.157:4242/root/pypi/+f/0db/f33f26c8d5305/dataclasses_json-0.6.7-py3-none-any.whl", hash = "sha256:0dbf33f26c8d5305befd61b39d2b3414e8a407bedc2834dea9b8d642666fb40a" },
-]
-
-[[package]]
-name = "deepdiff"
-version = "8.6.1"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-dependencies = [
-    { name = "orderly-set" },
-]
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/ec5/6d7a769ca8089/deepdiff-8.6.1.tar.gz", hash = "sha256:ec56d7a769ca80891b5200ec7bd41eec300ced91ebcc7797b41eb2b3f3ff643a" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/ee8/708a7f7d37fb2/deepdiff-8.6.1-py3-none-any.whl", hash = "sha256:ee8708a7f7d37fb273a541fa24ad010ed484192cd0c4ffc0fa0ed5e2d4b9e78b" },
 ]
 
 [[package]]
@@ -550,15 +437,6 @@ wheels = [
 ]
 
 [[package]]
-name = "jsonpath-python"
-version = "1.0.6"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/dd5/be4a72d8a2995/jsonpath-python-1.0.6.tar.gz", hash = "sha256:dd5be4a72d8a2995c3f583cf82bf3cd1a9544cfdabf2d22595b67aff07349666" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/1e3/b78df579f5efc/jsonpath_python-1.0.6-py3-none-any.whl", hash = "sha256:1e3b78df579f5efc23565293612decee04214609208a2335884b3ee3f786b575" },
-]
-
-[[package]]
 name = "jsonpointer"
 version = "3.0.0"
 source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
@@ -650,19 +528,6 @@ dependencies = [
 sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/7a5/0a04ada9a133b/langchain_text_splitters-0.3.11.tar.gz", hash = "sha256:7a50a04ada9a133bbabb80731df7f6ddac51bc9f1b9cab7fa09304d71d38a6cc" }
 wheels = [
     { url = "http://172.16.121.157:4242/root/pypi/+f/cf0/79131166a487f/langchain_text_splitters-0.3.11-py3-none-any.whl", hash = "sha256:cf079131166a487f1372c8ab5d0bfaa6c0a4291733d9c43a34a16ac9bcd6a393" },
-]
-
-[[package]]
-name = "langchain-unstructured"
-version = "0.1.5"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-dependencies = [
-    { name = "langchain-core" },
-    { name = "unstructured-client" },
-]
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/65b/ff90863276c04/langchain_unstructured-0.1.5.tar.gz", hash = "sha256:65bff90863276c04f22dd69c2766c6e171c62275295ed62b7377bede9fd8a825" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/3fc/8bb3c6361450a/langchain_unstructured-0.1.5-py3-none-any.whl", hash = "sha256:3fc8bb3c6361450a4ca5b3d667f9db6d59e0a0d4c498da6c2e5d6f9ed8790b77" },
 ]
 
 [[package]]
@@ -786,15 +651,6 @@ wheels = [
 ]
 
 [[package]]
-name = "nest-asyncio"
-version = "1.6.0"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/6f1/72d5449aca15a/nest_asyncio-1.6.0.tar.gz", hash = "sha256:6f172d5449aca15afd6c646851f4e31e02c598d553a667e38cafa997cfec55fe" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/87a/f6efd6b5e897c/nest_asyncio-1.6.0-py3-none-any.whl", hash = "sha256:87af6efd6b5e897c81050477ef65c62e2b2f35d51703cae01aff2905b1852e1c" },
-]
-
-[[package]]
 name = "numpy"
 version = "2.3.3"
 source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
@@ -863,15 +719,6 @@ dependencies = [
 sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/8d2/13ee5aaf91737/openai-2.3.0.tar.gz", hash = "sha256:8d213ee5aaf91737faea2d7fc1cd608657a5367a18966372a3756ceaabfbd812" }
 wheels = [
     { url = "http://172.16.121.157:4242/root/pypi/+f/a7a/a83be6f7b0ab2/openai-2.3.0-py3-none-any.whl", hash = "sha256:a7aa83be6f7b0ab2e4d4d7bcaf36e3d790874c0167380c5d0afd0ed99a86bd7b" },
-]
-
-[[package]]
-name = "orderly-set"
-version = "5.5.0"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/e87/185c8e4d8afa6/orderly_set-5.5.0.tar.gz", hash = "sha256:e87185c8e4d8afa64e7f8160ee2c542a475b738bc891dc3f58102e654125e6ce" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/46f/0b801948e98f4/orderly_set-5.5.0-py3-none-any.whl", hash = "sha256:46f0b801948e98f427b412fcabb831677194c05c3b699b80de260374baa0b1e7" },
 ]
 
 [[package]]
@@ -1002,14 +849,12 @@ dependencies = [
     { name = "langchain" },
     { name = "langchain-community" },
     { name = "langchain-openai" },
-    { name = "langchain-unstructured" },
     { name = "pdf2image" },
     { name = "pillow" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pymupdf" },
     { name = "pypdf" },
-    { name = "pytesseract" },
     { name = "python-multipart" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
@@ -1027,14 +872,12 @@ requires-dist = [
     { name = "langchain", specifier = ">=0.3.27" },
     { name = "langchain-community", specifier = ">=0.3.31" },
     { name = "langchain-openai", specifier = ">=0.3.35" },
-    { name = "langchain-unstructured", specifier = ">=0.1.5" },
     { name = "pdf2image", specifier = ">=1.17.0" },
     { name = "pillow", specifier = ">=11.3.0" },
     { name = "pydantic", specifier = ">=2.12.0" },
     { name = "pydantic-settings", specifier = ">=2.11.0" },
     { name = "pymupdf", specifier = ">=1.26.5" },
     { name = "pypdf", specifier = ">=6.1.1" },
-    { name = "pytesseract", specifier = ">=0.3.13" },
     { name = "python-multipart", specifier = ">=0.0.20" },
     { name = "sqlalchemy", specifier = ">=2.0.44" },
     { name = "uvicorn", specifier = ">=0.37.0" },
@@ -1113,15 +956,6 @@ wheels = [
     { url = "http://172.16.121.157:4242/root/pypi/+f/990/f6b3e2a27d683/propcache-0.4.1-cp314-cp314t-win_amd64.whl", hash = "sha256:990f6b3e2a27d683cb7602ed6c86f15ee6b43b1194736f9baaeb93d0016633b1" },
     { url = "http://172.16.121.157:4242/root/pypi/+f/ece/f2343af4cc68e/propcache-0.4.1-cp314-cp314t-win_arm64.whl", hash = "sha256:ecef2343af4cc68e05131e45024ba34f6095821988a9d0a02aa7c73fcc448aa9" },
     { url = "http://172.16.121.157:4242/root/pypi/+f/af2/a6052aeb6cf17/propcache-0.4.1-py3-none-any.whl", hash = "sha256:af2a6052aeb6cf17d3e46ee169099044fd8224cbaf75c76a2ef596e8163e2237" },
-]
-
-[[package]]
-name = "pycparser"
-version = "2.23"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/788/16d4f24add8f1/pycparser-2.23.tar.gz", hash = "sha256:78816d4f24add8f10a06d6f05b4d424ad9e96cfebf68a4ddc99c65c0720d00c2" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/e5c/6e8d3fbad5347/pycparser-2.23-py3-none-any.whl", hash = "sha256:e5c6e8d3fbad53479cab09ac03729e0a9faf2bee3db8208a550daf5af81a5934" },
 ]
 
 [[package]]
@@ -1232,19 +1066,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pytesseract"
-version = "0.3.13"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-dependencies = [
-    { name = "packaging" },
-    { name = "pillow" },
-]
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/4bf/5f880c99406f5/pytesseract-0.3.13.tar.gz", hash = "sha256:4bf5f880c99406f52a3cfc2633e42d9dc67615e69d8a509d74867d3baddb5db9" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/7a9/9c6c2ac598360/pytesseract-0.3.13-py3-none-any.whl", hash = "sha256:7a99c6c2ac598360693d83a416e36e0b33a67638bb9d77fdcac094a3589d4b34" },
-]
-
-[[package]]
 name = "pytest"
 version = "8.4.2"
 source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
@@ -1270,18 +1091,6 @@ dependencies = [
 sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/c60/9a64a2a876846/pytest_asyncio-1.2.0.tar.gz", hash = "sha256:c609a64a2a8768462d0c99811ddb8bd2583c33fd33cf7f21af1c142e824ffb57" }
 wheels = [
     { url = "http://172.16.121.157:4242/root/pypi/+f/8e1/7ae5e46d8e7ef/pytest_asyncio-1.2.0-py3-none-any.whl", hash = "sha256:8e17ae5e46d8e7efe51ab6494dd2010f4ca8dae51652aa3c8d55acf50bfb2e99" },
-]
-
-[[package]]
-name = "python-dateutil"
-version = "2.9.0.post0"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-dependencies = [
-    { name = "six" },
-]
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/37d/d54208da7e1cd/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/a8b/2bc7bffae2822/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427" },
 ]
 
 [[package]]
@@ -1430,15 +1239,6 @@ wheels = [
 ]
 
 [[package]]
-name = "six"
-version = "1.17.0"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/ff7/0335d468e7eb6/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/472/1f391ed90541f/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274" },
-]
-
-[[package]]
 name = "sniffio"
 version = "1.3.1"
 source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
@@ -1573,37 +1373,6 @@ dependencies = [
 sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/ba5/61c48a67c5958/typing_inspection-0.4.2.tar.gz", hash = "sha256:ba561c48a67c5958007083d386c3295464928b01faa735ab8547c5692e87f464" }
 wheels = [
     { url = "http://172.16.121.157:4242/root/pypi/+f/4ed/1cacbdc298c22/typing_inspection-0.4.2-py3-none-any.whl", hash = "sha256:4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7" },
-]
-
-[[package]]
-name = "unstructured-client"
-version = "0.25.9"
-source = { registry = "http://172.16.121.157:4242/tilibit/releases/+simple" }
-dependencies = [
-    { name = "certifi" },
-    { name = "charset-normalizer" },
-    { name = "cryptography" },
-    { name = "dataclasses-json" },
-    { name = "deepdiff" },
-    { name = "httpx" },
-    { name = "idna" },
-    { name = "jsonpath-python" },
-    { name = "marshmallow" },
-    { name = "mypy-extensions" },
-    { name = "nest-asyncio" },
-    { name = "packaging" },
-    { name = "pypdf" },
-    { name = "python-dateutil" },
-    { name = "requests" },
-    { name = "requests-toolbelt" },
-    { name = "six" },
-    { name = "typing-extensions" },
-    { name = "typing-inspect" },
-    { name = "urllib3" },
-]
-sdist = { url = "http://172.16.121.157:4242/root/pypi/+f/fcc/461623f58fefb/unstructured-client-0.25.9.tar.gz", hash = "sha256:fcc461623f58fefb0e22508e28bf653a8f6934b9779cb4a90dd68d77a39fb5b2" }
-wheels = [
-    { url = "http://172.16.121.157:4242/root/pypi/+f/c98/4c01878c8fc24/unstructured_client-0.25.9-py3-none-any.whl", hash = "sha256:c984c01878c8fc243be7c842467d1113a194d885ab6396ae74258ee42717c5b5" },
 ]
 
 [[package]]
