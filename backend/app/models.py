@@ -7,7 +7,8 @@ from sqlalchemy import (
     Float,
     Text,
     DateTime,
-    ForeignKey
+    ForeignKey,
+    LargeBinary
 )
 from sqlalchemy.orm import relationship
 
@@ -46,6 +47,7 @@ class Request(Base):
     status = Column(Text, nullable=False, default="Open")  # Open, In Progress, Closed
     pdf_path = Column(Text, nullable=True)
     pdf_filename = Column(Text, nullable=True)
+    pdf_content = Column(LargeBinary, nullable=True)  # Store PDF binary data
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

@@ -13,12 +13,14 @@ interface CreateRequestDialogProps {
 
 export const CreateRequestDialog = ({ isOpen, onClose, onSuccess }: CreateRequestDialogProps) => {
   const [extractedData, setExtractedData] = useState<ExtractedData | undefined>();
+  const [pdfFile, setPdfFile] = useState<File | undefined>();
   const [showForm, setShowForm] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleExtract = (data: ExtractedData) => {
+  const handleExtract = (data: ExtractedData, file: File) => {
     setExtractedData(data);
+    setPdfFile(file);
     setShowForm(true);
   };
 
@@ -30,6 +32,7 @@ export const CreateRequestDialog = ({ isOpen, onClose, onSuccess }: CreateReques
 
   const resetDialog = () => {
     setExtractedData(undefined);
+    setPdfFile(undefined);
     setShowForm(false);
   };
 
@@ -78,7 +81,7 @@ export const CreateRequestDialog = ({ isOpen, onClose, onSuccess }: CreateReques
             </>
           )}
 
-          {showForm && <RequestForm extractedData={extractedData} onSuccess={handleSuccess} />}
+          {showForm && <RequestForm extractedData={extractedData} pdfFile={pdfFile} onSuccess={handleSuccess} />}
         </div>
       </div>
     </div>

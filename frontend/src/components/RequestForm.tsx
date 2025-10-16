@@ -21,13 +21,14 @@ import {
 
 interface RequestFormProps {
   extractedData?: ExtractedData;
+  pdfFile?: File;
   existingRequest?: Request;
   mode?: 'create' | 'view';
   onSuccess?: () => void;
   onDelete?: () => void;
 }
 
-export const RequestForm = ({ extractedData, existingRequest, mode = 'create', onSuccess, onDelete }: RequestFormProps) => {
+export const RequestForm = ({ extractedData, pdfFile, existingRequest, mode = 'create', onSuccess, onDelete }: RequestFormProps) => {
   console.log('RequestForm - extractedData:', extractedData);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -259,7 +260,7 @@ export const RequestForm = ({ extractedData, existingRequest, mode = 'create', o
           description: 'Procurement request saved successfully',
         });
       } else {
-        await api.createRequest(dataToSubmit);
+        await api.createRequest(dataToSubmit, pdfFile);
         toast({
           title: 'Request created',
           description: 'Procurement request submitted successfully',

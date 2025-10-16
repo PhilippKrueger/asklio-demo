@@ -16,7 +16,8 @@ class RequestService:
         request_data: RequestCreate,
         db: Session,
         pdf_path: Optional[str] = None,
-        pdf_filename: Optional[str] = None
+        pdf_filename: Optional[str] = None,
+        pdf_content: Optional[bytes] = None
     ) -> Request:
         """
         Create a new procurement request.
@@ -26,6 +27,7 @@ class RequestService:
             db: Database session
             pdf_path: Optional path to uploaded PDF
             pdf_filename: Optional original PDF filename
+            pdf_content: Optional PDF binary content
 
         Returns:
             Request: Created request object
@@ -49,7 +51,8 @@ class RequestService:
             total_cost=request_data.total_cost,
             status="Open",
             pdf_path=pdf_path,
-            pdf_filename=pdf_filename
+            pdf_filename=pdf_filename,
+            pdf_content=pdf_content
         )
 
         db.add(request)

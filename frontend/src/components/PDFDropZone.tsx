@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 
 interface PDFDropZoneProps {
-  onExtract: (data: ExtractedData) => void;
+  onExtract: (data: ExtractedData, file: File) => void;
 }
 
 export const PDFDropZone = ({ onExtract }: PDFDropZoneProps) => {
@@ -46,7 +46,7 @@ export const PDFDropZone = ({ onExtract }: PDFDropZoneProps) => {
 
     try {
       const result = await api.extractPDF(file);
-      onExtract(result.extracted_data);
+      onExtract(result.extracted_data, file);
       toast({
         title: 'PDF processed',
         description: 'Data extracted successfully',

@@ -9,14 +9,27 @@ export const api = {
     return response.json();
   },
 
-  async createRequest(data: RequestCreate): Promise<Request> {
-    const response = await fetch(`${API_BASE_URL}/requests`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error('Failed to create request');
-    return response.json();
+  async createRequest(data: RequestCreate, pdfFile?: File): Promise<Request> {
+    if (pdfFile) {
+      const formData = new FormData();
+      formData.append('request_data', JSON.stringify(data));
+      formData.append('file', pdfFile);
+      
+      const response = await fetch(`${API_BASE_URL}/requests/with-pdf`, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) throw new Error('Failed to create request');
+      return response.json();
+    } else {
+      const response = await fetch(`${API_BASE_URL}/requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error('Failed to create request');
+      return response.json();
+    }
   },
 
   async updateRequest(id: number, data: RequestUpdate): Promise<Request> {
@@ -63,5 +76,11 @@ export const api = {
       method: 'DELETE',
     });
     if (!response.ok) throw new Error('Failed to delete request');
+  },
+
+  async downloadPDF(requestId: number): Promise<Blob> {
+    const response = await fetch(`${API_BASE_URL}/requests/${requestId}/download-pdf`);
+    if (!response.ok) throw new Error('Failed to download PDF');
+    return response.blob();
   },
 };

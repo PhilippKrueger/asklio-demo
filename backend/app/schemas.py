@@ -104,6 +104,7 @@ class ExtractedData(BaseModel):
     currency: str = Field(default="EUR", description="Currency code (EUR, USD, etc.)")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Overall extraction confidence")
     commodity_group: Optional[int] = None
+    pdf_filename: Optional[str] = None
 
 
 class PDFUploadResponse(BaseModel):

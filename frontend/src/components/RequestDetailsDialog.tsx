@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Download } from 'lucide-react';
 import { Request } from '@/types/request';
 import { 
   Dialog,
@@ -56,21 +56,59 @@ export const RequestDetailsDialog = ({ request, isOpen, onClose, onUpdate }: Req
     onUpdate?.();
   };
 
+  const handleDownloadPDF = async () => {
+    try {
+      const blob = await api.downloadPDF(request.id);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `request_${request.id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast({
+        title: 'PDF downloaded',
+        description: 'The PDF has been downloaded successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Download failed',
+        description: 'No PDF available for this request',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-heavy">
           <DialogHeader>
-            <DialogTitle className="font-bold text-xl">
-              REQUEST #{request.id} - {request.title}
-            </DialogTitle>
-            <div className="text-sm text-muted-foreground space-y-1 mt-2">
-              <div>
-                <strong>Created:</strong> {new Date(request.created_at).toLocaleString()}
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <DialogTitle className="font-bold text-xl">
+                  REQUEST #{request.id} - {request.title}
+                </DialogTitle>
+                <div className="text-sm text-muted-foreground space-y-1 mt-2">
+                  <div>
+                    <strong>Created:</strong> {new Date(request.created_at).toLocaleString()}
+                  </div>
+                  <div>
+                    <strong>Updated:</strong> {new Date(request.updated_at).toLocaleString()}
+                  </div>
+                </div>
               </div>
-              <div>
-                <strong>Updated:</strong> {new Date(request.updated_at).toLocaleString()}
-              </div>
+              <Button
+                onClick={handleDownloadPDF}
+                variant="outline"
+                size="sm"
+                className="border-heavy ml-4"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download PDF
+              </Button>
             </div>
           </DialogHeader>
           
