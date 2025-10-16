@@ -2,20 +2,14 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    poppler-utils \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy requirements
-COPY pyproject.toml uv.lock ./
+COPY pyproject.toml ./
 
 # Install uv
 RUN pip install uv
 
-# Install dependencies
-RUN uv sync --frozen
+# Install dependencies without lockfile
+RUN uv sync
 
 # Copy application code
 COPY . .
