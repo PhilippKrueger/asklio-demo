@@ -72,6 +72,7 @@ class RequestUpdate(BaseModel):
     department: Optional[str] = None
     total_cost: Optional[float] = Field(None, gt=0)
     commodity_group_id: Optional[int] = None
+    order_lines: Optional[List[OrderLineCreate]] = None
 
 
 class StatusUpdate(BaseModel):

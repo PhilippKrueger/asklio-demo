@@ -23,27 +23,27 @@ export const validateTextLength = (
   maxLength: number, 
   fieldName: string
 ): ValidationResult => {
-  const sanitized = sanitizeText(value);
+  const trimmed = value.trim();
   
-  if (sanitized.length === 0) {
+  if (trimmed.length === 0) {
     return {
       isValid: false,
       error: `${fieldName} is required`,
-      sanitizedValue: sanitized
+      sanitizedValue: trimmed
     };
   }
   
-  if (sanitized.length > maxLength) {
+  if (trimmed.length > maxLength) {
     return {
       isValid: false,
       error: `${fieldName} must be ${maxLength} characters or less`,
-      sanitizedValue: sanitized.substring(0, maxLength)
+      sanitizedValue: trimmed.substring(0, maxLength)
     };
   }
   
   return {
     isValid: true,
-    sanitizedValue: sanitized
+    sanitizedValue: trimmed
   };
 };
 
@@ -77,38 +77,27 @@ export const validateVatId = (vatId: string): ValidationResult => {
 };
 
 export const validateDepartment = (department: string): ValidationResult => {
-  const sanitized = sanitizeText(department);
+  const trimmed = department.trim();
   
-  if (sanitized.length === 0) {
+  if (trimmed.length === 0) {
     return {
       isValid: false,
       error: 'Department is required',
-      sanitizedValue: sanitized
+      sanitizedValue: trimmed
     };
   }
   
-  // Department pattern: letters, spaces, hyphens, and common abbreviations
-  const departmentPattern = /^[A-Za-z\s\-&.()]+$/;
-  
-  if (!departmentPattern.test(sanitized)) {
-    return {
-      isValid: false,
-      error: 'Department can only contain letters, spaces, hyphens, and common punctuation',
-      sanitizedValue: sanitized.replace(/[^A-Za-z\s\-&.()]/g, '')
-    };
-  }
-  
-  if (sanitized.length > 50) {
+  if (trimmed.length > 50) {
     return {
       isValid: false,
       error: 'Department must be 50 characters or less',
-      sanitizedValue: sanitized.substring(0, 50)
+      sanitizedValue: trimmed.substring(0, 50)
     };
   }
   
   return {
     isValid: true,
-    sanitizedValue: sanitized
+    sanitizedValue: trimmed
   };
 };
 
@@ -151,27 +140,27 @@ export const validateNumericInput = (
 };
 
 export const validatePositionDescription = (description: string): ValidationResult => {
-  const sanitized = sanitizeText(description);
+  const trimmed = description.trim();
   
-  if (sanitized.length === 0) {
+  if (trimmed.length === 0) {
     return {
       isValid: false,
       error: 'Position description is required',
-      sanitizedValue: sanitized
+      sanitizedValue: trimmed
     };
   }
   
-  if (sanitized.length > 500) {
+  if (trimmed.length > 500) {
     return {
       isValid: false,
       error: 'Position description must be 500 characters or less',
-      sanitizedValue: sanitized.substring(0, 500)
+      sanitizedValue: trimmed.substring(0, 500)
     };
   }
   
   return {
     isValid: true,
-    sanitizedValue: sanitized
+    sanitizedValue: trimmed
   };
 };
 

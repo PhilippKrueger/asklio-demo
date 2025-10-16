@@ -140,10 +140,28 @@ class RequestService:
         if not request:
             return None
 
-        # Update fields that are provided
-        update_dict = update_data.model_dump(exclude_unset=True)
+        # Update fields that are provided (excluding order_lines)
+        update_dict = update_data.model_dump(exclude_unset=True, exclude={'order_lines'})
         for field, value in update_dict.items():
             setattr(request, field, value)
+
+        # Handle order lines update if provided
+        if update_data.order_lines is not None:
+            # Delete existing order lines
+            db.query(OrderLine).filter(OrderLine.request_id == request_id).delete()
+            db.flush()
+
+            # Create new order lines
+            for line_data in update_data.order_lines:
+                order_line = OrderLine(
+                    request_id=request.id,
+                    position_description=line_data.position_description,
+                    unit_price=line_data.unit_price,
+                    amount=line_data.amount,
+                    unit=line_data.unit,
+                    total_price=line_data.total_price
+                )
+                db.add(order_line)
 
         request.updated_at = datetime.utcnow()
 

@@ -48,6 +48,7 @@ export interface RequestUpdate {
   department?: string;
   total_cost?: number;
   commodity_group_id?: number;
+  order_lines?: OrderLine[];
 }
 
 export interface ExtractedData {
