@@ -15,18 +15,14 @@ from app.api import commodity_groups as commodity_groups_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize database on startup."""
-    # Create uploads directory if it doesn't exist
     settings.upload_dir.mkdir(parents=True, exist_ok=True)
 
-    # Initialize database tables and seed data
     initialize_database()
 
     yield
 
-    # Cleanup can go here if needed
 
 
-# Create FastAPI application
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
@@ -34,7 +30,6 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
@@ -43,12 +38,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount uploads directory for serving PDFs
 uploads_path = Path(__file__).parent / "app" / "uploads"
 uploads_path.mkdir(parents=True, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=str(uploads_path)), name="uploads")
 
-# Include API routers
 app.include_router(
     requests_router.router,
     prefix=f"{settings.api_prefix}/requests",
