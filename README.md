@@ -39,6 +39,32 @@ npm install
 npm run dev
 ```
 
+## Testing
+
+### Running Tests
+
+The backend includes pytest tests for core functionality. To run the tests:
+
+```bash
+cd backend
+uv run pytest
+```
+
+Run tests with verbose output:
+```bash
+uv run pytest -v
+```
+
+Run a specific test file:
+```bash
+uv run pytest tests/test_extraction.py
+```
+
+Run tests with coverage:
+```bash
+uv run pytest --cov=. --cov-report=html
+```
+
 ## Environment Variables
 
 - `OPENAI_API_KEY`: Required for PDF extraction and commodity classification features
