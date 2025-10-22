@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: asklio-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: PORT
+        value: 8000
+    disk:
+      name: backend-data
+      mountPath: /app/data
+      sizeGB: 1
+    
+  - type: web
+    name: asklio-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: asklio-backend
+          property: host
